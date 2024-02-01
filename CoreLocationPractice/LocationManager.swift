@@ -27,29 +27,23 @@ class LocationManager: NSObject {
     }
 
     func start() {
-        locationManager.startMonitoringVisits()
-        logs.append(Log(text: "*** Start MonitoringVisits ***"))
+        locationManager.startUpdatingHeading()
+        logs.append(Log(text: "*** Start updating Heading ***"))
     }
 
     func stop() {
-        locationManager.stopMonitoringVisits()
-        logs.append(Log(text: "*** Start MonitoringVisits ***"))
+        locationManager.stopUpdatingHeading()
+        logs.append(Log(text: "*** Start updating Heading ***"))
 
     }
 }
 
 extension LocationManager: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
-        if visit.departureDate == Date.distantPast {
-            logs.append(Log(text: "방문 시작: \(visit.arrivalDate)"))
-        } else {
-            logs.append(Log(text: "방문 종료: \(visit.departureDate)"))
-        }
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+
+        logs.append(Log(text: "\(-newHeading.trueHeading * Double.pi / 180)"))
     }
 
-    func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
-        logs.append(Log(text: error.localizedDescription))
-    }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         logs.append(Log(text: error.localizedDescription))
     }
