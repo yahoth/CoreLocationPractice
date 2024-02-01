@@ -13,10 +13,21 @@
 		767332032B6A85B200E2A292 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 767332022B6A85B200E2A292 /* Assets.xcassets */; };
 		767332062B6A85B200E2A292 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 767332042B6A85B200E2A292 /* LaunchScreen.storyboard */; };
 		7673320E2B6A865800E2A292 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7673320D2B6A865800E2A292 /* LocationManager.swift */; };
-		767332112B6AAF7300E2A292 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 767332102B6AAF7300E2A292 /* SnapKit */; };
-		767332132B6AAF7300E2A292 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 767332122B6AAF7300E2A292 /* SnapKit-Dynamic */; };
 		767332152B6AEBB300E2A292 /* CLLocationUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767332142B6AEBB300E2A292 /* CLLocationUpdateManager.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		76F6910C2B6C022A008BB30B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		767331F62B6A85B100E2A292 /* CoreLocationPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreLocationPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -35,8 +46,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				767332112B6AAF7300E2A292 /* SnapKit in Frameworks */,
-				767332132B6AAF7300E2A292 /* SnapKit-Dynamic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +93,7 @@
 				767331F22B6A85B100E2A292 /* Sources */,
 				767331F32B6A85B100E2A292 /* Frameworks */,
 				767331F42B6A85B100E2A292 /* Resources */,
+				76F6910C2B6C022A008BB30B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -91,8 +101,6 @@
 			);
 			name = CoreLocationPractice;
 			packageProductDependencies = (
-				767332102B6AAF7300E2A292 /* SnapKit */,
-				767332122B6AAF7300E2A292 /* SnapKit-Dynamic */,
 			);
 			productName = CoreLocationPractice;
 			productReference = 767331F62B6A85B100E2A292 /* CoreLocationPractice.app */;
@@ -123,7 +131,6 @@
 			);
 			mainGroup = 767331ED2B6A85B100E2A292;
 			packageReferences = (
-				7673320F2B6AAF7300E2A292 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = 767331F72B6A85B100E2A292 /* Products */;
 			projectDirPath = "";
@@ -302,10 +309,13 @@
 				DEVELOPMENT_TEAM = 54ZG4WU22U;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CoreLocationPractice/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "위치 정보를 기반으로 현재 위치를 제공합니다\n";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 정보를 기반으로 현재 위치를 제공합니다\n";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -329,10 +339,13 @@
 				DEVELOPMENT_TEAM = 54ZG4WU22U;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = CoreLocationPractice/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "위치 정보를 기반으로 현재 위치를 제공합니다\n";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "위치 정보를 기반으로 현재 위치를 제공합니다\n";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -368,30 +381,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		7673320F2B6AAF7300E2A292 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.7.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		767332102B6AAF7300E2A292 /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7673320F2B6AAF7300E2A292 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		767332122B6AAF7300E2A292 /* SnapKit-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7673320F2B6AAF7300E2A292 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = "SnapKit-Dynamic";
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 767331EE2B6A85B100E2A292 /* Project object */;
 }
