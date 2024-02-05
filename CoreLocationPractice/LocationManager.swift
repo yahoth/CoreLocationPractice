@@ -33,15 +33,27 @@ class LocationManager: NSObject {
 
     func stop() {
         locationManager.stopUpdatingHeading()
-        logs.append(Log(text: "*** Start updating Heading ***"))
-
+        logs.append(Log(text: "*** Stop updating Heading ***"))
     }
 }
 
 extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        var heading: String = ""
 
-        logs.append(Log(text: "\(-newHeading.trueHeading * Double.pi / 180)"))
+        if newHeading.trueHeading > 45 && newHeading.trueHeading <= 135 {
+            heading = "동쪽"
+        } else if newHeading.trueHeading > 135 && newHeading.trueHeading <= 225 {
+            heading = "남쪽"
+        } else if newHeading.trueHeading > 225 && newHeading.trueHeading <= 315 {
+            heading = "서쪽"
+        } else {
+            heading = "북쪽"
+        }
+
+        if logs.last?.text != heading {
+            logs.append(Log(text: "\(heading)"))
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
