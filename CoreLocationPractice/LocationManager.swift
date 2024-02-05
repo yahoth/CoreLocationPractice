@@ -33,7 +33,7 @@ class LocationManager: NSObject {
 
     func stop() {
         locationManager.stopMonitoringVisits()
-        logs.append(Log(text: "*** Start MonitoringVisits ***"))
+        logs.append(Log(text: "*** Stop MonitoringVisits ***"))
 
     }
 }
