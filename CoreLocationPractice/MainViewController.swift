@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainViewController.swift
 //  CoreLocationPractice
 //
 //  Created by TAEHYOUNG KIM on 1/31/24.
@@ -8,17 +8,23 @@
 import UIKit
 import CoreLocation
 import Combine
+import MapKit
 
-class ViewController: UIViewController {
-
+class MainViewController: UIViewController {
+    // Model
     let locationManager = LocationManager()
+    var subscriptions = Set<AnyCancellable>()
+
+    // UI Component
     var startButton: UIButton!
     var stopButton: UIButton!
+    var resetButton: UIButton!
     var hStackView: UIStackView!
     var collectionView: UICollectionView!
-//    var log: [String] = []
+    var mapView: MKMapView!
+
+    // CollectionView Datasource
     var datasource: UICollectionViewDiffableDataSource<Section, Log>!
-    var subscriptions = Set<AnyCancellable>()
     enum Section {
         case main
     }
@@ -28,11 +34,11 @@ class ViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setCollectionView()
         configureDatasource()
+        setMapView()
         setHStackView()
         setButton()
         setConstraints()
         bind()
-        setNavigationItem()
     }
 
     func applySnapshot(logs: [Log]) {
@@ -54,7 +60,7 @@ class ViewController: UIViewController {
 
 
 // CollectionView 관련 코드
-extension ViewController {
+extension MainViewController {
 
     func setCollectionView() {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -89,8 +95,15 @@ extension ViewController {
 }
 
 //UI Components 관련 코드
-extension ViewController {
+extension MainViewController {
 
+    func setMapView() {
+        mapView = MKMapView()
+        mapView.showsUserLocation = true
+        mapView.userTrackingMode = .followWithHeading
+        mapView.showsUserTrackingButton = true
+        mapView.translatesAutoresizingMaskIntoConstraints = false
+    }
 
     func setHStackView() {
         hStackView = UIStackView()
@@ -109,28 +122,38 @@ extension ViewController {
         stopButton.setTitle("Stop", for: .normal)
         stopButton.backgroundColor = .red
         stopButton.addTarget(self, action: #selector(stopButtonTapped), for: .touchUpInside)
+        resetButton = UIButton()
+        resetButton.setImage(UIImage(systemName: "trash"), for: .normal)
+        resetButton.backgroundColor = .red
+        resetButton.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
 
-        [startButton, stopButton].forEach {
+        [startButton, stopButton, resetButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
-            $0.layer.cornerRadius = 30
+            $0.layer.cornerRadius = 16
         }
     }
 
     func setConstraints() {
+        view.addSubview(mapView)
         view.addSubview(collectionView)
         view.addSubview(hStackView)
-        [startButton, stopButton].forEach(hStackView.addArrangedSubview(_:))
+        [startButton, stopButton, resetButton].forEach(hStackView.addArrangedSubview(_:))
 
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mapView.topAnchor.constraint(equalTo: view.topAnchor),
+            mapView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            mapView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            mapView.heightAnchor.constraint(equalTo: view.widthAnchor),
+
+            collectionView.topAnchor.constraint(equalTo: mapView.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: hStackView.topAnchor),
 
-            hStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            hStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            hStackView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
-            hStackView.heightAnchor.constraint(equalToConstant: 150)
+            hStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            hStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            hStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30),
+            hStackView.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 
@@ -140,15 +163,8 @@ extension ViewController {
     @objc func stopButtonTapped() {
         locationManager.stop()
     }
-}
-
-extension ViewController {
-    func setNavigationItem() {
-        let resetItem = UIBarButtonItem(image: UIImage(systemName: "trash"), style: .plain, target: self, action: #selector(resetLog))
-        self.navigationItem.rightBarButtonItem = resetItem
-    }
-
-    @objc func resetLog() {
+    @objc func resetButtonTapped() {
         locationManager.logs = []
     }
+
 }
