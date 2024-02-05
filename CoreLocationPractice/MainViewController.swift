@@ -49,11 +49,25 @@ class MainViewController: UIViewController {
         datasource.apply(snapshot)
     }
 
+    func updateMonitoring(_ region: CLCircularRegion?) {
+        if let region {
+            let circle = MKCircle(center: region.center, radius: region.radius)
+            mapView.addOverlay(circle)
+        } else {
+            mapView.removeOverlays(mapView.overlays)
+        }
+    }
+
     func bind() {
         locationManager.$logs
             .receive(on: DispatchQueue.main)
             .sink { logs in
                 self.applySnapshot(logs: logs)
+            }.store(in: &subscriptions)
+        locationManager.$region
+            .receive(on: DispatchQueue.main)
+            .sink { region in
+                self.updateMonitoring(region)
             }.store(in: &subscriptions)
     }
 }
@@ -102,6 +116,7 @@ extension MainViewController {
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .followWithHeading
         mapView.showsUserTrackingButton = true
+        mapView.delegate = self
         mapView.translatesAutoresizingMaskIntoConstraints = false
     }
 
@@ -165,6 +180,17 @@ extension MainViewController {
     }
     @objc func resetButtonTapped() {
         locationManager.logs = []
+    }
+
+}
+
+extension MainViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKCircleRenderer(overlay: overlay)
+        renderer.fillColor = UIColor.blue.withAlphaComponent(0.1)
+        renderer.strokeColor = UIColor.blue
+        renderer.lineWidth = 1.0
+        return renderer
     }
 
 }

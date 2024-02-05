@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import Combine
 
 struct Log: Hashable {
     let id: UUID = UUID()
@@ -15,44 +16,50 @@ struct Log: Hashable {
 
 class LocationManager: NSObject {
     let locationManager = CLLocationManager()
-    var previousLocation: CLLocation?
     @Published var logs: [Log] = []
+    @Published var region: CLCircularRegion?
+    var subscriptions = Set<AnyCancellable>()
 
     override init() {
         super.init()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-        locationManager.allowsBackgroundLocationUpdates = true
-        locationManager.showsBackgroundLocationIndicator = true
     }
 
     func start() {
-        locationManager.startUpdatingHeading()
-        logs.append(Log(text: "*** Start updating Heading ***"))
+        let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: 37.33497685282217, longitude: -122.04664142846063), radius: 500, identifier: "Homestead High School")
+        self.region = region
+        monitorRegionAtLocation(region: region)
+    }
+
+    func monitorRegionAtLocation(region: CLCircularRegion) {
+        if CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) {
+            region.notifyOnEntry = true
+            region.notifyOnExit = true
+            locationManager.startMonitoring(for: region)
+            logs.append(Log(text: "*** Start Monitoring ***"))
+        }
     }
 
     func stop() {
-        locationManager.stopUpdatingHeading()
-        logs.append(Log(text: "*** Stop updating Heading ***"))
+        logs.append(Log(text: "*** Stop Monitoring ***"))
+        locationManager.stopMonitoring(for: region ?? CLCircularRegion())
+        region = nil
     }
 }
 
 extension LocationManager: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        var heading: String = ""
-
-        if newHeading.trueHeading > 45 && newHeading.trueHeading <= 135 {
-            heading = "동쪽"
-        } else if newHeading.trueHeading > 135 && newHeading.trueHeading <= 225 {
-            heading = "남쪽"
-        } else if newHeading.trueHeading > 225 && newHeading.trueHeading <= 315 {
-            heading = "서쪽"
-        } else {
-            heading = "북쪽"
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        if let region = region as? CLCircularRegion {
+            let identifier = region.identifier
+            logs.append(Log(text: "Enter region: \(identifier)"))
         }
+    }
 
-        if logs.last?.text != heading {
-            logs.append(Log(text: "\(heading)"))
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        if let region = region as? CLCircularRegion {
+            let identifier = region.identifier
+            logs.append(Log(text: "Exit region: \(identifier)"))
         }
     }
 
