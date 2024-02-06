@@ -9,11 +9,14 @@
 /* Begin PBXBuildFile section */
 		767331FA2B6A85B100E2A292 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767331F92B6A85B100E2A292 /* AppDelegate.swift */; };
 		767331FC2B6A85B100E2A292 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767331FB2B6A85B100E2A292 /* SceneDelegate.swift */; };
-		767331FE2B6A85B100E2A292 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767331FD2B6A85B100E2A292 /* MainViewController.swift */; };
+		767331FE2B6A85B100E2A292 /* GeofencingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767331FD2B6A85B100E2A292 /* GeofencingViewController.swift */; };
 		767332032B6A85B200E2A292 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 767332022B6A85B200E2A292 /* Assets.xcassets */; };
 		767332062B6A85B200E2A292 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 767332042B6A85B200E2A292 /* LaunchScreen.storyboard */; };
 		7673320E2B6A865800E2A292 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7673320D2B6A865800E2A292 /* LocationManager.swift */; };
 		767332152B6AEBB300E2A292 /* CLLocationUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767332142B6AEBB300E2A292 /* CLLocationUpdateManager.swift */; };
+		76BBC6A12B72AE0000BF8AC3 /* AccuracyTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BBC6A02B72AE0000BF8AC3 /* AccuracyTestViewController.swift */; };
+		76BBC6A32B72AE4300BF8AC3 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BBC6A22B72AE4300BF8AC3 /* MainTabBarController.swift */; };
+		76BBC6A52B72B22F00BF8AC3 /* AccuracyTestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BBC6A42B72B22F00BF8AC3 /* AccuracyTestManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,12 +36,15 @@
 		767331F62B6A85B100E2A292 /* CoreLocationPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreLocationPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		767331F92B6A85B100E2A292 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		767331FB2B6A85B100E2A292 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		767331FD2B6A85B100E2A292 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		767331FD2B6A85B100E2A292 /* GeofencingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeofencingViewController.swift; sourceTree = "<group>"; };
 		767332022B6A85B200E2A292 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		767332052B6A85B200E2A292 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		767332072B6A85B200E2A292 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7673320D2B6A865800E2A292 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		767332142B6AEBB300E2A292 /* CLLocationUpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationUpdateManager.swift; sourceTree = "<group>"; };
+		76BBC6A02B72AE0000BF8AC3 /* AccuracyTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccuracyTestViewController.swift; sourceTree = "<group>"; };
+		76BBC6A22B72AE4300BF8AC3 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		76BBC6A42B72B22F00BF8AC3 /* AccuracyTestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccuracyTestManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,14 +79,25 @@
 			children = (
 				767331F92B6A85B100E2A292 /* AppDelegate.swift */,
 				767331FB2B6A85B100E2A292 /* SceneDelegate.swift */,
-				767331FD2B6A85B100E2A292 /* MainViewController.swift */,
-				7673320D2B6A865800E2A292 /* LocationManager.swift */,
+				76BBC6A22B72AE4300BF8AC3 /* MainTabBarController.swift */,
+				767331FD2B6A85B100E2A292 /* GeofencingViewController.swift */,
+				76BBC6A02B72AE0000BF8AC3 /* AccuracyTestViewController.swift */,
+				76BBC6A62B72C44100BF8AC3 /* Manager */,
 				767332142B6AEBB300E2A292 /* CLLocationUpdateManager.swift */,
 				767332022B6A85B200E2A292 /* Assets.xcassets */,
 				767332042B6A85B200E2A292 /* LaunchScreen.storyboard */,
 				767332072B6A85B200E2A292 /* Info.plist */,
 			);
 			path = CoreLocationPractice;
+			sourceTree = "<group>";
+		};
+		76BBC6A62B72C44100BF8AC3 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				7673320D2B6A865800E2A292 /* LocationManager.swift */,
+				76BBC6A42B72B22F00BF8AC3 /* AccuracyTestManager.swift */,
+			);
+			path = Manager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -158,9 +175,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76BBC6A12B72AE0000BF8AC3 /* AccuracyTestViewController.swift in Sources */,
 				767332152B6AEBB300E2A292 /* CLLocationUpdateManager.swift in Sources */,
+				76BBC6A52B72B22F00BF8AC3 /* AccuracyTestManager.swift in Sources */,
 				7673320E2B6A865800E2A292 /* LocationManager.swift in Sources */,
-				767331FE2B6A85B100E2A292 /* MainViewController.swift in Sources */,
+				76BBC6A32B72AE4300BF8AC3 /* MainTabBarController.swift in Sources */,
+				767331FE2B6A85B100E2A292 /* GeofencingViewController.swift in Sources */,
 				767331FA2B6A85B100E2A292 /* AppDelegate.swift in Sources */,
 				767331FC2B6A85B100E2A292 /* SceneDelegate.swift in Sources */,
 			);

@@ -39,6 +39,12 @@ class AccuracyTestManager: NSObject {
         locationManager.stopUpdatingLocation()
         logs.append(Log(text: "🔥 Stop 🔥"))
     }
+
+    func dateFormatter(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "hh:mm:ss"
+        return formatter.string(from: date)
+    }
 }
 
 /// test: invalid accuracy를 가진 CLLocation 객체는 모두 부정확할까? 혹은 ex)  speed는 멀쩡한데 horizontal은 부정확할까?
@@ -47,33 +53,36 @@ extension AccuracyTestManager: CLLocationManagerDelegate {
         guard let location = locations.last else { return }
         totalMeasurement += 1
 
-        let text =  """
-                    number: \(totalMeasurement)\n
+        let text = { (string: String, totalMeasurement: Int) -> String in
+                    """
+                    ✅number: \(totalMeasurement)\n
+                    \(string)  / \(self.dateFormatter(date: location.timestamp))\n
                     speed:\(location.speed)\n
                     speedAccuracy: \(location.speedAccuracy)\n
                     horizontal: \(location.horizontalAccuracy)\n
                     vertical: \(location.verticalAccuracy)
                     """
+        }
 
         if location.speed < 0 {
             invalidSpeed += 1
-            logs.append(Log(text: "✅✅✅Speed - " + text))
+            logs.append(Log(text: text("Speed", totalMeasurement)))
         }
 
         if location.speedAccuracy < 0 {
             invalidSpeedAccuracy += 1
-            logs.append(Log(text: "✅✅✅SpeedAccuracy - " + text))
+            logs.append(Log(text: text("SpeedAccuracy", totalMeasurement)))
         }
 
 
         if location.horizontalAccuracy < 0 {
             invalidCoordinate += 1
-            logs.append(Log(text: "✅✅✅Coordinate - " + text))
+            logs.append(Log(text: text("Coordinate", totalMeasurement)))
         }
 
         if location.verticalAccuracy <= 0 {
             invalidAltitude += 1
-            logs.append(Log(text: "✅✅✅Altitude - " + text))
+            logs.append(Log(text: text("Altitude", totalMeasurement)))
         }
     }
 }
