@@ -19,18 +19,29 @@ class AccuracyTestViewController: UIViewController {
     var stopButton: UIButton!
     var resetButton: UIButton!
     var changeModeButton: UIButton!
-    var hStackView: UIStackView!
+    let buttonHStackView = UIStackView()
     var collectionView: UICollectionView!
+    var buttons: [UIButton] {
+        [startButton, stopButton, resetButton, changeModeButton]
+    }
 
-    var labelsStackView: UIStackView!
-    var totalMeasurement: UILabel!
-    var invalidSpeed: UILabel!
-    var invalidSpeedAccuracy: UILabel!
-    var invalidCoordinateAccuracy: UILabel!
-    var invalidAltitudeAccuracy: UILabel!
-
-    var labels: [UILabel] {
+    let invalidCountLabelsVStackView = UIStackView()
+    var totalMeasurement = UILabel()
+    var invalidSpeed = UILabel()
+    var invalidSpeedAccuracy = UILabel()
+    var invalidCoordinateAccuracy = UILabel()
+    var invalidAltitudeAccuracy = UILabel()
+    var invalidCountLabels: [UILabel] {
         [totalMeasurement, invalidSpeed, invalidSpeedAccuracy, invalidCoordinateAccuracy, invalidAltitudeAccuracy]
+    }
+
+
+    let speedInfoVStackView = UIStackView()
+    var speed = UILabel()
+    var topSpeed = UILabel()
+    var averageSpeed = UILabel()
+    var speedInfoLabels: [UILabel] {
+        [speed, topSpeed, averageSpeed]
     }
 
     // CollectionView Datasource
@@ -42,14 +53,26 @@ class AccuracyTestViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        setLabels()
-        setLabelsStackView()
+
+        // CollectionView Configuring
         setCollectionView()
         configureDatasource()
-        setHStackView()
+
+        // UI Setup
+        invalidCountLabels.forEach{ set($0, textAlignment: .left) }
+        set(invalidCountLabelsVStackView, axis: .vertical, spacing: 12)
+
+        speedInfoLabels.forEach {set($0, textAlignment: .right) }
+        set(speedInfoVStackView, axis: .vertical, spacing: 12)
+
+        set(buttonHStackView, axis: .horizontal, spacing: 20)
         setButton()
         setChangeModeButton()
+
+        // Auto-Layout
         setConstraints()
+
+        // Data bind
         bind()
     }
 
@@ -74,7 +97,6 @@ class AccuracyTestViewController: UIViewController {
                 self.totalMeasurement.text = "total count: \(totalCount)"
             }.store(in: &subscriptions)
 
-
         testManager.$invalidSpeed
             .receive(on: DispatchQueue.main)
             .combineLatest(testManager.$invalidSpeedAccuracy, testManager.$invalidCoordinate, testManager.$invalidAltitude)
@@ -83,6 +105,17 @@ class AccuracyTestViewController: UIViewController {
                 self.invalidSpeedAccuracy.text = "speedAccuracy: \(speedAccuracy)"
                 self.invalidCoordinateAccuracy.text = "coordinate: \(coordinate)"
                 self.invalidAltitudeAccuracy.text = "altitude: \(altitude)"
+            }.store(in: &subscriptions)
+
+        testManager.$speedKMS
+            .receive(on: DispatchQueue.main)
+            .combineLatest(testManager.$speeds)
+            .sink { speed, speeds in
+                let topSpeed = speeds.max() ?? 0
+                let averageSpeed = speeds.reduce(0, +) / Double(speeds.count)
+                self.speed.text = "speed: \(String(format: "%.0f", speed))km/h"
+                self.averageSpeed.text = "average: \(String(format: "%.0f", averageSpeed))km/h"
+                self.topSpeed.text = "top: \(String(format: "%.0f", topSpeed))km/h"
             }.store(in: &subscriptions)
     }
 }
@@ -124,28 +157,12 @@ extension AccuracyTestViewController {
 
 //Test 통계 Components 관련 (Labels)
 extension AccuracyTestViewController {
-    func setLabels() {
-        totalMeasurement = UILabel()
-        invalidSpeed = UILabel()
-        invalidSpeedAccuracy = UILabel()
-        invalidCoordinateAccuracy = UILabel()
-        invalidAltitudeAccuracy = UILabel()
-
-        labels.forEach {
-            $0.font = .systemFont(ofSize: 15, weight: .bold)
-            $0.textColor = .label
-            $0.textAlignment = .left
-            $0.numberOfLines = 1
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
-    }
-
-    func setLabelsStackView() {
-        labelsStackView = UIStackView()
-        labelsStackView.axis = .vertical
-        labelsStackView.spacing = 12
-        labelsStackView.distribution = .fillEqually
-        labelsStackView.translatesAutoresizingMaskIntoConstraints = false
+    func set(_ label: UILabel, textAlignment: NSTextAlignment) {
+        label.font = .systemFont(ofSize: 15, weight: .bold)
+        label.textColor = .label
+        label.textAlignment = textAlignment
+        label.numberOfLines = 1
+        label.translatesAutoresizingMaskIntoConstraints = false
     }
 }
 
@@ -175,12 +192,11 @@ extension CLActivityType: CaseIterable {
 //UI Components 관련 코드
 extension AccuracyTestViewController {
 
-    func setHStackView() {
-        hStackView = UIStackView()
-        hStackView.axis = .horizontal
-        hStackView.spacing = 20
-        hStackView.distribution = .fillEqually
-        hStackView.translatesAutoresizingMaskIntoConstraints = false
+    func set(_ stackView: UIStackView, axis: NSLayoutConstraint.Axis, spacing: CGFloat) {
+        stackView.axis = axis
+        stackView.spacing = spacing
+        stackView.distribution = .fillEqually
+        stackView.translatesAutoresizingMaskIntoConstraints = false
     }
 
     func setChangeModeButton() {
@@ -221,26 +237,33 @@ extension AccuracyTestViewController {
     }
 
     func setConstraints() {
-        view.addSubview(labelsStackView)
-        labels.forEach(labelsStackView.addArrangedSubview(_:))
-        view.addSubview(collectionView)
-        view.addSubview(hStackView)
-        [startButton, stopButton, resetButton, changeModeButton].forEach(hStackView.addArrangedSubview(_:))
+        [collectionView, invalidCountLabelsVStackView, buttonHStackView, speedInfoVStackView].forEach(view.addSubview(_:))
+
+        invalidCountLabels.forEach(invalidCountLabelsVStackView.addArrangedSubview(_:))
+
+        speedInfoLabels.forEach(speedInfoVStackView.addArrangedSubview(_:))
+
+        buttons.forEach(buttonHStackView.addArrangedSubview(_:))
+
 
         NSLayoutConstraint.activate([
-            labelsStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            labelsStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            labelsStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            invalidCountLabelsVStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            invalidCountLabelsVStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            invalidCountLabelsVStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
 
-            collectionView.topAnchor.constraint(equalTo: labelsStackView.safeAreaLayoutGuide.bottomAnchor),
+            speedInfoVStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            speedInfoVStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            speedInfoVStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+
+            collectionView.topAnchor.constraint(equalTo: invalidCountLabelsVStackView.safeAreaLayoutGuide.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: hStackView.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: buttonHStackView.topAnchor),
 
-            hStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            hStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            hStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30),
-            hStackView.heightAnchor.constraint(equalToConstant: 50)
+            buttonHStackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            buttonHStackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            buttonHStackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30),
+            buttonHStackView.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 
@@ -251,11 +274,6 @@ extension AccuracyTestViewController {
         testManager.stop()
     }
     @objc func resetButtonTapped() {
-        testManager.logs = []
-        testManager.invalidSpeed = 0
-        testManager.invalidAltitude = 0
-        testManager.invalidCoordinate = 0
-        testManager.invalidSpeedAccuracy = 0
-        testManager.totalMeasurement = 0
+        testManager.reset()
     }
 }

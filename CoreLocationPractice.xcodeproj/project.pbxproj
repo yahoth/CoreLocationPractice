@@ -83,7 +83,6 @@
 				767331FD2B6A85B100E2A292 /* GeofencingViewController.swift */,
 				76BBC6A02B72AE0000BF8AC3 /* AccuracyTestViewController.swift */,
 				76BBC6A62B72C44100BF8AC3 /* Manager */,
-				767332142B6AEBB300E2A292 /* CLLocationUpdateManager.swift */,
 				767332022B6A85B200E2A292 /* Assets.xcassets */,
 				767332042B6A85B200E2A292 /* LaunchScreen.storyboard */,
 				767332072B6A85B200E2A292 /* Info.plist */,
@@ -96,6 +95,7 @@
 			children = (
 				7673320D2B6A865800E2A292 /* LocationManager.swift */,
 				76BBC6A42B72B22F00BF8AC3 /* AccuracyTestManager.swift */,
+				767332142B6AEBB300E2A292 /* CLLocationUpdateManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";

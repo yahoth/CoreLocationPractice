@@ -18,6 +18,9 @@ class AccuracyTestManager: NSObject {
     @Published var totalMeasurement: Int = 0
     @Published var logs = [Log]()
 
+    @Published var speeds = [Double]()
+    @Published var speedKMS: Double = 0
+
     override init() {
         super.init()
         locationManager.delegate = self
@@ -40,6 +43,17 @@ class AccuracyTestManager: NSObject {
         logs.append(Log(text: "🔥 Stop 🔥"))
     }
 
+    func reset() {
+        invalidSpeedAccuracy = 0
+        invalidSpeed = 0
+        invalidCoordinate = 0
+        invalidAltitude = 0
+        totalMeasurement = 0
+        logs = []
+        speeds = []
+        speedKMS = 0
+    }
+
     func dateFormatter(date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "hh:mm:ss"
@@ -53,9 +67,9 @@ extension AccuracyTestManager: CLLocationManagerDelegate {
         guard let location = locations.last else { return }
         totalMeasurement += 1
 
-        let text = { (string: String, totalMeasurement: Int) -> String in
+        let text = { (string: String) -> String in
                     """
-                    ✅number: \(totalMeasurement)\n
+                    ✅number: \(self.totalMeasurement)\n
                     \(string)  / \(self.dateFormatter(date: location.timestamp))\n
                     speed:\(location.speed)\n
                     speedAccuracy: \(location.speedAccuracy)\n
@@ -66,23 +80,33 @@ extension AccuracyTestManager: CLLocationManagerDelegate {
 
         if location.speed < 0 {
             invalidSpeed += 1
-            logs.append(Log(text: text("Speed", totalMeasurement)))
+            logs.append(Log(text: text("Speed")))
         }
 
         if location.speedAccuracy < 0 {
             invalidSpeedAccuracy += 1
-            logs.append(Log(text: text("SpeedAccuracy", totalMeasurement)))
+            logs.append(Log(text: text("SpeedAccuracy")))
+        } else {
+            speedKMS = location.speed * 3.6
+            speeds.append(location.speed * 3.6)
         }
 
 
         if location.horizontalAccuracy < 0 {
             invalidCoordinate += 1
-            logs.append(Log(text: text("Coordinate", totalMeasurement)))
+            logs.append(Log(text: text("Coordinate")))
         }
 
         if location.verticalAccuracy <= 0 {
             invalidAltitude += 1
-            logs.append(Log(text: text("Altitude", totalMeasurement)))
+            logs.append(Log(text: text("Altitude")))
         }
+
+        print("""
+              -------------------------------------------------\n
+              speedAccuracy: \(String(format: "%.2f", location.speedAccuracy))
+              horizontalAccuracy: \(String(format: "%.2f", location.horizontalAccuracy))
+              verticalAccuracy: \(String(format: "%.2f", location.verticalAccuracy))
+              """)
     }
 }
