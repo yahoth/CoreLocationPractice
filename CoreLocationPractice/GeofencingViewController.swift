@@ -1,5 +1,5 @@
 //
-//  MainViewController.swift
+//  GeofencingViewController.swift
 //  CoreLocationPractice
 //
 //  Created by TAEHYOUNG KIM on 1/31/24.
@@ -10,7 +10,7 @@ import CoreLocation
 import Combine
 import MapKit
 
-class MainViewController: UIViewController {
+class GeofencingViewController: UIViewController {
     // Model
     let locationManager = LocationManager()
     var subscriptions = Set<AnyCancellable>()
@@ -74,7 +74,7 @@ class MainViewController: UIViewController {
 
 
 // CollectionView 관련 코드
-extension MainViewController {
+extension GeofencingViewController {
 
     func setCollectionView() {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -109,7 +109,7 @@ extension MainViewController {
 }
 
 //UI Components 관련 코드
-extension MainViewController {
+extension GeofencingViewController {
 
     func setMapView() {
         mapView = MKMapView()
@@ -184,7 +184,7 @@ extension MainViewController {
 
 }
 
-extension MainViewController: MKMapViewDelegate {
+extension GeofencingViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKCircleRenderer(overlay: overlay)
         renderer.fillColor = UIColor.blue.withAlphaComponent(0.1)

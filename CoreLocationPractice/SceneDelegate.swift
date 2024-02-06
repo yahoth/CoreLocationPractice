@@ -13,14 +13,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+//        guard let windowScene = (scene as? UIWindowScene) else { return }
+//        window = UIWindow(windowScene: windowScene) // SceneDelegate의 프로퍼티에 설정해줌
+//        let mainViewController = GeofencingViewController() // 맨 처음 보여줄 ViewController
+//        let navigationViewController = UINavigationController(rootViewController: mainViewController)
+//
+//        window?.rootViewController = navigationViewController
+//        window?.makeKeyAndVisible()
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene) // SceneDelegate의 프로퍼티에 설정해줌
-        let mainViewController = MainViewController() // 맨 처음 보여줄 ViewController
-        let navigationViewController = UINavigationController(rootViewController: mainViewController)
+        let tabBarController = MainTabBarController()
 
-        window?.rootViewController = navigationViewController
+        let navigationVC = UINavigationController(rootViewController: tabBarController)
+
+        window?.rootViewController = navigationVC
         window?.makeKeyAndVisible()
+
+
     }
+    
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
